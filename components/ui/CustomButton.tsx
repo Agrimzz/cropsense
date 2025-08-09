@@ -13,7 +13,7 @@ export function CustomButton({
     <TouchableOpacity
       onPress={handlePress}
       activeOpacity={0.7}
-      className={`bg-primary rounded-xl min-h-[50px] justify-center items-center ${containerStyles} ${
+      className={`bg-primary rounded-3xl min-h-[50px] justify-center items-center ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       }`}
       disabled={isLoading}

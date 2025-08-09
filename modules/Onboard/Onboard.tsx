@@ -1,4 +1,5 @@
 import { CustomButton } from "@/components/ui/CustomButton";
+import { router } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,7 +22,9 @@ export function Onboard() {
       </Text>
       <CustomButton
         title="Get Started"
-        handlePress={() => {}}
+        handlePress={() => {
+          router.push("/login");
+        }}
         containerStyles="w-full absolute bottom-12"
         textStyles="font-pbold"
       />

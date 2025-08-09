@@ -25,6 +25,9 @@ module.exports = {
         pthin: ["LufgaThin", "sans-serif"],
         pblack: ["LufgaBlack", "sans-serif"],
       },
+      borderRadius: {
+        "3xl": "20px",
+      },
     },
   },
   plugins: [],
