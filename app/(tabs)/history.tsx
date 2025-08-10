@@ -1,12 +1,3 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { History } from "@/modules";
 
-const Recommendations = () => {
-  return (
-    <View>
-      <Text>Recommendations</Text>
-    </View>
-  );
-};
-
-export default Recommendations;
+export default History;

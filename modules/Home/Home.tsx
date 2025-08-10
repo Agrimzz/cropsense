@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./components/Header";
+import History from "./components/History";
 import QuickActions from "./components/QuickActions";
 import WeatherCard from "./components/WeatherCard";
 export function Home() {
@@ -72,6 +73,8 @@ export function Home() {
         <WeatherCard lat={location?.lat} lon={location?.lon} />
 
         <QuickActions />
+
+        <History />
       </ScrollView>
     </SafeAreaView>
   );
