@@ -17,7 +17,7 @@ const LocationCard = ({
 
   if (isLoading || (!lat && !lon)) {
     return (
-      <View className="w-full px-4">
+      <View className="w-full px-4 mt-4">
         <View className="w-full bg-textSecondary/30 rounded-3xl p-4 animate-pulse items-center justify-center">
           <Text className="text-textPrimary text-sm font-pregular">
             {isLoading ? "Loading..." : "Location not available"}
@@ -27,7 +27,7 @@ const LocationCard = ({
     );
   }
   return (
-    <View className="w-full px-4">
+    <View className="w-full px-4 mt-4">
       <View className="w-full  bg-textSecondary/30 rounded-3xl p-4">
         <View className="flex flex-row gap-1 items-center">
           <MapPin size={16} color="#f5f5dc" strokeWidth={1.5} />
