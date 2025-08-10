@@ -1,7 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
+import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./components/Header";
-
+import LocationCard from "./components/LocationCard";
 export function Home() {
   const date = new Date();
   const formattedDate = date
@@ -12,6 +15,35 @@ export function Home() {
       day: "numeric",
     })
     .replace(/, (?=\d{4}$)/, " ");
+
+  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(
+    null
+  );
+
+  useEffect(() => {
+    (async () => {
+      // Try to load location from storage first
+      const storedLocation = await AsyncStorage.getItem("userLocation");
+      if (storedLocation) {
+        setLocation(JSON.parse(storedLocation));
+        return;
+      }
+
+      // If not found, get current location
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") return;
+
+      let loc = await Location.getCurrentPositionAsync({});
+      const newLocation = {
+        lat: loc.coords.latitude,
+        lon: loc.coords.longitude,
+      };
+      setLocation(newLocation);
+
+      // Save to AsyncStorage
+      await AsyncStorage.setItem("userLocation", JSON.stringify(newLocation));
+    })();
+  }, []);
 
   return (
     <SafeAreaView className="w-full h-screen bg-background">
@@ -33,6 +65,8 @@ export function Home() {
           className="w-20 h-20 rounded-full"
         />
       </View>
+
+      <LocationCard lat={location?.lat} lon={location?.lon} />
     </SafeAreaView>
   );
 }
