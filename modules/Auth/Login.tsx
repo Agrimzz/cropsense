@@ -35,7 +35,9 @@ export function Login() {
 
       <CustomButton
         title="Login"
-        handlePress={() => {}}
+        handlePress={() => {
+          router.push("/home");
+        }}
         containerStyles="w-full mt-8"
       />
       <Text className="text-xs font-pregular text-textSecondary mt-4 text-center">
