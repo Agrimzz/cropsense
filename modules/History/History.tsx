@@ -1,62 +1,16 @@
+import { useApiQuery } from "@/hooks/useApiQuery";
 import { router } from "expo-router";
-import { Plus } from "lucide-react-native";
+import { LoaderCircle, Plus } from "lucide-react-native";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HistoryCard from "../Home/components/HistoryCard";
 
 export function History() {
-  const data = [
-    {
-      id: 1,
-      crop: "Tomato",
-      score: 80,
-      temp: "25°C",
-      rain: "10mm",
-      humidity: "60%",
-      ph: "7.0",
-      img: "https://images.unsplash.com/photo-1566218246241-934ad8b38ea6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      crop: "Cucumber",
-      score: 80,
-      temp: "25°C",
-      rain: "10mm",
-      humidity: "60%",
-      ph: "7.0",
-      img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      crop: "Carrot",
-      score: 80,
-      temp: "25°C",
-      rain: "10mm",
-      humidity: "60%",
-      ph: "7.0",
-      img: "https://plus.unsplash.com/premium_photo-1680344513213-0ad1795f766b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 4,
-      crop: "Tomato",
-      score: 80,
-      temp: "25°C",
-      rain: "10mm",
-      humidity: "60%",
-      ph: "7.0",
-      img: "https://images.unsplash.com/photo-1566218246241-934ad8b38ea6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 5,
-      crop: "Cucumber",
-      score: 80,
-      temp: "25°C",
-      rain: "10mm",
-      humidity: "60%",
-      ph: "7.0",
-      img: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  const { data: history, isLoading } = useApiQuery<any>(
+    ["history"],
+    "/cropsense/v1/input-data/"
+  );
+
   return (
     <SafeAreaView className="w-full h-screen bg-background px-4">
       <View className="flex flex-row justify-between items-center py-2">
@@ -75,20 +29,45 @@ export function History() {
           <Plus size={24} color="#212121" strokeWidth={1.5} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={data}
-        ListEmptyComponent={
-          <View className="flex flex-row justify-center items-center h-full">
-            <Text className="text-textPrimary text-2xl font-psemibold">
-              No History Found
-            </Text>
-          </View>
-        }
-        renderItem={({ item }) => <HistoryCard {...item} />}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 80 }}
-      />
+      {isLoading ? (
+        <View className="flex flex-row justify-center items-center h-full">
+          <LoaderCircle
+            size={24}
+            color="#f5f5dc"
+            strokeWidth={1.5}
+            className="animate-spin"
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={history}
+          ListEmptyComponent={
+            <View className="flex flex-row justify-center items-center h-full">
+              <Text className="text-textPrimary text-2xl font-psemibold">
+                No History Found
+              </Text>
+            </View>
+          }
+          renderItem={({ item }) => (
+            <HistoryCard
+              crop={item?.recommendations[0].recommended_crop.name}
+              score={item?.recommendations[0].confidence}
+              id={item?.id}
+              temp={item?.nitrogen}
+              rain={item?.rainfall}
+              humidity={item?.humidity}
+              ph={item?.ph}
+              img={
+                item?.recommendations[0].recommended_crop.image ||
+                "https://images.unsplash.com/photo-1511735643442-503bb3bd348a?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 80 }}
+        />
+      )}
     </SafeAreaView>
   );
 }

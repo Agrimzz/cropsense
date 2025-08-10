@@ -1,7 +1,6 @@
 import * as z from "zod";
 
 export const recommendSchema = z.object({
-  crop: z.string().min(1, "Crop is required"),
   nitrogen: z
     .string()
     .min(1)

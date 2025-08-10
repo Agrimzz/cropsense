@@ -10,7 +10,6 @@ export function Onboard() {
   useEffect(() => {
     const tryRefresh = async () => {
       const refreshToken = await getRefreshToken();
-      console.log(refreshToken);
       if (!refreshToken) return; // No refresh token, stay on login
 
       try {

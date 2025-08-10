@@ -17,6 +17,7 @@ export function FormField({
   type = "text",
   otherStyles = "",
   error,
+  disabled,
   containerStyles,
   ...props
 }: FormFieldProps) {

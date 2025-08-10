@@ -71,7 +71,6 @@ export function Register() {
         // Axios error with response
         if (err?.response?.status) {
           const status = err.response.status;
-          console.log(status);
           if (status === 400) {
             message = "Register Failed. Email already in use.";
           } else if (status === 401) {

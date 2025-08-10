@@ -9,4 +9,5 @@ export type FormFieldProps = TextInputProps & {
   error?: string;
   type?: "text" | "password" | "number" | "email" | "decimal" | "phone";
   containerStyles?: string;
+  disabled?: boolean;
 };

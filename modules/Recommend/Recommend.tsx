@@ -1,8 +1,7 @@
 import { CustomButton } from "@/components/ui/CustomButton";
 import { FormField } from "@/components/ui/FormField";
+import { useApiMutation } from "@/hooks/useApiMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import * as Location from "expo-location";
 import { router } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
@@ -10,15 +9,6 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RecommendSchema, recommendSchema } from "./schema/recommendSchema";
-
-// --- API call
-const useRecommendCrop = () =>
-  useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await axios.post("https://your-api.com/recommend", data);
-      return res.data;
-    },
-  });
 
 export function Recommend() {
   const {
@@ -41,7 +31,47 @@ export function Recommend() {
     },
   });
 
-  const mutation = useRecommendCrop();
+  const { mutate: recommend, isPending } = useApiMutation(
+    "post",
+    "/cropsense/v1/recommend/"
+  );
+
+  const onSubmit = (data: RecommendSchema) => {
+    const payload = {
+      nitrogen: Number(data.nitrogen),
+      phosphorus: Number(data.phosphorus),
+      potassium: Number(data.potassium),
+      ph: Number(data.ph),
+      temperature: Number(data.temperature),
+      humidity: Number(data.humidity),
+      rainfall: Number(data.rainfall),
+    };
+    recommend(payload, {
+      onSuccess: (res: any) => {
+        console.log(res);
+        router.replace(`/recommendation/${res.input_data.id}`);
+      },
+      onError: (err: any) => {
+        let message = "Something went wrong. Please try again.";
+
+        // Axios error with response
+        if (err?.response?.status) {
+          const status = err.response.status;
+          if (status === 400) {
+            message = "Register Failed. Email already in use.";
+          } else if (status === 401) {
+            message = "Incorrect email or password.";
+          } else if (status === 403) {
+            message = "You are not authorized to access this resource.";
+          } else if (status === 500) {
+            message = "Server error. Please try again later.";
+          }
+        }
+
+        Alert.alert("Login Failed", message);
+      },
+    });
+  };
 
   const handleDetectLocation = async () => {
     try {
@@ -56,17 +86,6 @@ export function Recommend() {
     } catch {
       Alert.alert("Error", "Could not detect location");
     }
-  };
-
-  const onSubmit = (data: FormData) => {
-    mutation.mutate(data, {
-      onSuccess: (result) => {
-        Alert.alert("Recommendation", JSON.stringify(result, null, 2));
-      },
-      onError: () => {
-        Alert.alert("Error", "Failed to get recommendation");
-      },
-    });
   };
 
   return (
@@ -137,6 +156,7 @@ export function Recommend() {
               title="pH Level"
               placeholder="Soil pH"
               value={field.value}
+              containerStyles="mt-4"
               handleChangeText={field.onChange}
               error={errors.ph?.message}
             />
@@ -151,6 +171,7 @@ export function Recommend() {
               title="Temperature (°C)"
               placeholder="Temperature"
               value={field.value}
+              containerStyles="mt-4"
               handleChangeText={field.onChange}
               error={errors.temperature?.message}
             />
@@ -165,6 +186,7 @@ export function Recommend() {
               title="Humidity (%)"
               placeholder="Humidity"
               value={field.value}
+              containerStyles="mt-4"
               handleChangeText={field.onChange}
               error={errors.humidity?.message}
             />
@@ -179,6 +201,7 @@ export function Recommend() {
               title="Rainfall (mm)"
               placeholder="Rainfall"
               value={field.value}
+              containerStyles="mt-4"
               handleChangeText={field.onChange}
               error={errors.rainfall?.message}
             />
@@ -186,7 +209,7 @@ export function Recommend() {
         />
 
         {/* Location */}
-        <View className="flex flex-row justify-between gap-2 items-end">
+        <View className="flex flex-row justify-between gap-2 items-end mt-4">
           <Controller
             control={control}
             name="latitude"
@@ -227,6 +250,7 @@ export function Recommend() {
         <CustomButton
           title="Get Recommendation"
           containerStyles="mt-4"
+          isLoading={isPending}
           handlePress={handleSubmit(onSubmit)}
         />
       </ScrollView>

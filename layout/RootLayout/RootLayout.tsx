@@ -46,6 +46,7 @@ export function RootLayout() {
           <Stack.Screen name="(auth)/register" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="recommend" />
+          <Stack.Screen name="recommendation/:id" />
         </Stack>
       </GestureHandlerRootView>
     </QueryClientProvider>
