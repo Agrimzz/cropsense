@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react-native";
 import React from "react";
 import { Image, Text, View } from "react-native";
 
-const LocationCard = ({
+const WeatherCard = ({
   lat,
   lon,
 }: {
@@ -27,8 +27,8 @@ const LocationCard = ({
     );
   }
   return (
-    <View className="w-full px-4 mt-4">
-      <View className="w-full  bg-textSecondary/30 rounded-3xl p-4">
+    <View className="w-full px-4 mt-8">
+      <View className="w-full  bg-textSecondary/30 rounded-3xl p-4 items-start">
         <View className="flex flex-row gap-1 items-center">
           <MapPin size={16} color="#f5f5dc" strokeWidth={1.5} />
           <Text className="text-textPrimary text-sm font-pregular">
@@ -96,4 +96,4 @@ const LocationCard = ({
   );
 };
 
-export default LocationCard;
+export default WeatherCard;
