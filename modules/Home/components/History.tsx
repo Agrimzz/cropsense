@@ -20,7 +20,7 @@ const History = () => {
         </Text>
       </View>
 
-      <View className="mt-4 gap-4 mb-12">
+      <View className="mt-4  mb-12">
         <HistoryCard
           crop="Tomato"
           score={80}

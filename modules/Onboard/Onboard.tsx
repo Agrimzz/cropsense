@@ -1,9 +1,33 @@
+import { api } from "@/api/client";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { clearTokens, getRefreshToken, saveTokens } from "@/utils/storage";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export function Onboard() {
+  useEffect(() => {
+    const tryRefresh = async () => {
+      const refreshToken = await getRefreshToken();
+      console.log(refreshToken);
+      if (!refreshToken) return; // No refresh token, stay on login
+
+      try {
+        // Attempt to refresh tokens
+        const res = await api.post("/accounts/v1/token/refresh/", {
+          refresh: refreshToken,
+        });
+        const { access } = res.data;
+        await saveTokens(access, refreshToken);
+        router.replace("/home");
+      } catch {
+        await clearTokens();
+        // Stay on login
+      }
+    };
+    tryRefresh();
+  }, []);
   return (
     <SafeAreaView className="w-full h-screen bg-background flex items-center justify-center px-4 relative">
       <View className="flex gap-1">

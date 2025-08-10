@@ -23,7 +23,9 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png",
       "dangerous": {
-        "allowedHostnames": ["*"]
+        "allowedHostnames": [
+          "*"
+        ]
       }
     },
     "plugins": [
@@ -36,7 +38,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

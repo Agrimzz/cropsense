@@ -17,6 +17,7 @@ export function FormField({
   type = "text",
   otherStyles = "",
   error,
+  containerStyles,
   ...props
 }: FormFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +39,7 @@ export function FormField({
   })();
 
   return (
-    <View className="flex gap-2">
+    <View className={`flex  gap-2 ${containerStyles}`}>
       <Text className="text-textPrimary text-sm font-medium">{title}</Text>
 
       <View

@@ -8,4 +8,5 @@ export type FormFieldProps = TextInputProps & {
   otherStyles?: string;
   error?: string;
   type?: "text" | "password" | "number" | "email" | "decimal" | "phone";
+  containerStyles?: string;
 };

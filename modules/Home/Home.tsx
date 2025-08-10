@@ -1,3 +1,4 @@
+import { useApiQuery } from "@/hooks/useApiQuery";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import Header from "./components/Header";
 import History from "./components/History";
 import QuickActions from "./components/QuickActions";
 import WeatherCard from "./components/WeatherCard";
+import { UserType } from "./Home.type";
 export function Home() {
   const date = new Date();
   const formattedDate = date
@@ -47,6 +49,8 @@ export function Home() {
     })();
   }, []);
 
+  const { data: user } = useApiQuery<UserType>(["user"], "/accounts/v1/me/");
+
   return (
     <SafeAreaView className="w-full h-screen bg-background">
       <ScrollView>
@@ -56,7 +60,9 @@ export function Home() {
           <View className="flex gap-1">
             <Text className="text-primary text-2xl font-psemibold">
               Welcome, {"\n"}
-              <Text className="text-textPrimary">Ram Bahadur</Text>
+              <Text className="text-textPrimary">
+                {user?.full_name ?? "User"}{" "}
+              </Text>
             </Text>
             <Text className="text-textSecondary text-sm font-pregular">
               {formattedDate}

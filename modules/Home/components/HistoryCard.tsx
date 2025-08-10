@@ -13,7 +13,7 @@ const HistoryCard = ({ crop, score, temp, rain, humidity, ph, img }: any) => {
   return (
     <ImageBackground
       source={{ uri: img }}
-      className="w-full rounded-3xl overflow-hidden flex justify-between p-4 relative"
+      className="w-full rounded-3xl overflow-hidden flex justify-between p-4 relative mt-2"
     >
       <LinearGradient
         colors={["rgba(0,0,0,0.9)", "rgba(0,0,0,0.5)", "transparent"]}

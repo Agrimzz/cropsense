@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -8,7 +9,10 @@ const QuickActions = () => {
         Quick Actions
       </Text>
       <View className="w-full flex flex-row flex-wrap justify-between mt-4">
-        <TouchableOpacity className="w-[49%] bg-primary h-[110px]  rounded-3xl items-center justify-center ">
+        <TouchableOpacity
+          className="w-[49%] bg-primary h-[110px]  rounded-3xl items-center justify-center "
+          onPress={() => router.push("/recommend")}
+        >
           <Text className="text-background text-base font-pregular text-center">
             Get Crop Recommendations
           </Text>
