@@ -1,5 +1,5 @@
 import { useFetchWeather } from "@/hooks/useFetchWeather";
-import { MapPin } from "lucide-react-native";
+import { LoaderCircle, MapPin } from "lucide-react-native";
 import React from "react";
 import { Image, Text, View } from "react-native";
 
@@ -18,10 +18,13 @@ const WeatherCard = ({
   if (isLoading || (!lat && !lon)) {
     return (
       <View className="w-full px-4 mt-4">
-        <View className="w-full min-h-[200px] bg-textSecondary/30 rounded-3xl p-4 animate-pulse items-center justify-center">
-          <Text className="text-textPrimary text-sm font-pregular">
-            {isLoading ? "Loading..." : "Location not available"}
-          </Text>
+        <View className="w-full min-h-[200px] bg-textSecondary/30 rounded-3xl p-4 items-center justify-center ">
+          <LoaderCircle
+            size={24}
+            color="#f5f5dc"
+            strokeWidth={1.5}
+            className="animate-spin"
+          />
         </View>
       </View>
     );

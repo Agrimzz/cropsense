@@ -1,22 +1,58 @@
 import { Tabs } from "expo-router";
 import { History, House, User } from "lucide-react-native";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-function TabIcon({ focused, Icon, title }: any) {
-  if (focused) {
-    return (
-      <View className="flex size-full flex-1  mt-4  justify-center items-center rounded-full overflow-hidden ">
-        <Icon size={20} color="#C3FF0A" />
-        <Text className="text-xs font-semibold  text-primary">{title}</Text>
-      </View>
-    );
-  }
+function TabIcon({ focused, Icon }: any) {
+  const active = "#C3FF0A";
+  const inactive = "#f5f5dc";
+
+  // shared values for animation
+  const scale = useSharedValue(1);
+  const translateY = useSharedValue(0);
+
+  useEffect(() => {
+    if (focused) {
+      scale.value = withTiming(1.2, {
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+      });
+      translateY.value = withTiming(-4, {
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+      });
+    } else {
+      scale.value = withTiming(1, {
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+      });
+      translateY.value = withTiming(0, {
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+      });
+    }
+  }, [focused, scale, translateY]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }, { translateY: translateY.value }],
+  }));
 
   return (
-    <View className="flex w-full flex-1  mt-4  justify-center items-center rounded-full overflow-hidden ">
-      <Icon size={20} color="#f5f5dc" />
-      <Text className="text-xs font-semibold  text-textPrimary">{title}</Text>
-    </View>
+    <Animated.View
+      style={animatedStyle}
+      className="items-center justify-center"
+    >
+      <Icon
+        size={26}
+        color={focused ? active : inactive}
+        strokeWidth={focused ? 2 : 1.5}
+      />
+    </Animated.View>
   );
 }
 
@@ -27,20 +63,14 @@ export function TabLayout() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarItemStyle: {
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          paddingVertical: 8,
         },
-
         tabBarStyle: {
-          backgroundColor: "rgba(97,97,97,0.3)",
+          backgroundColor: "rgba(97,97,97,0.5)",
           borderRadius: 50,
           marginHorizontal: 20,
           marginBottom: 36,
-          height: 52,
+          height: 50,
           position: "absolute",
           borderWidth: 1,
           borderColor: "rgba(97,97,97,0.3)",
@@ -54,7 +84,7 @@ export function TabLayout() {
           title: "home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} Icon={House} title="Home" />
+            <TabIcon focused={focused} Icon={House} />
           ),
         }}
       />
@@ -65,7 +95,7 @@ export function TabLayout() {
           title: "history",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} Icon={History} title="History" />
+            <TabIcon focused={focused} Icon={History} />
           ),
         }}
       />
@@ -76,7 +106,7 @@ export function TabLayout() {
           title: "profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} Icon={User} title="Profile" />
+            <TabIcon focused={focused} Icon={User} />
           ),
         }}
       />

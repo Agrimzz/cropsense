@@ -10,6 +10,7 @@ export function History() {
     ["history"],
     "/cropsense/v1/input-data/"
   );
+  console.log(history);
 
   return (
     <SafeAreaView className="w-full h-screen bg-background px-4">

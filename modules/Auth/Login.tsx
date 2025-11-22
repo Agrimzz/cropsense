@@ -1,11 +1,9 @@
-import { api } from "@/api/client";
 import { CustomButton } from "@/components/ui/CustomButton";
 import { FormField } from "@/components/ui/FormField";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import { clearTokens, getRefreshToken, saveTokens } from "@/utils/storage";
+import { saveTokens } from "@/utils/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,27 +21,6 @@ export function Login() {
       password: "",
     },
   });
-
-  useEffect(() => {
-    const tryRefresh = async () => {
-      const refreshToken = await getRefreshToken();
-      if (!refreshToken) return; // No refresh token, stay on login
-
-      try {
-        // Attempt to refresh tokens
-        const res = await api.post("/accounts/v1/token/refresh/", {
-          refresh: refreshToken,
-        });
-        const { access } = res.data;
-        await saveTokens(access, refreshToken);
-        router.replace("/home");
-      } catch {
-        await clearTokens();
-        // Stay on login
-      }
-    };
-    tryRefresh();
-  }, []);
 
   const { mutate: register, isPending } = useApiMutation(
     "post",

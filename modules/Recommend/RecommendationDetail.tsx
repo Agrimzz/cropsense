@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Bubbles,
+  ChevronLeft,
   CloudRain,
   Feather,
   LoaderCircle,
@@ -11,7 +12,7 @@ import {
   Thermometer,
 } from "lucide-react-native";
 import { useEffect } from "react";
-import { ImageBackground, Pressable, Text, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export function RecommendationDetail() {
@@ -47,7 +48,7 @@ export function RecommendationDetail() {
   if (isLoading || isPending) {
     return (
       <View className="w-full h-screen bg-background px-4">
-        <View className="flex flex-row justify-center items-center h-full animate-spin">
+        <View className="flex flex-row justify-center items-center h-full">
           <LoaderCircle
             size={24}
             color="#f5f5dc"
@@ -60,11 +61,15 @@ export function RecommendationDetail() {
   }
   return (
     <SafeAreaView className="w-full h-screen bg-background px-4">
-      <Pressable onPress={() => router.back()}>
-        <Text className="text-textPrimary text-2xl font-psemibold py-2">
+      <TouchableOpacity
+        className="py-2 flex flex-row gap-2 items-center"
+        onPress={() => router.back()}
+      >
+        <ChevronLeft size={24} color="#f5f5dc" strokeWidth={1.5} />
+        <Text className="text-textPrimary text-lg font-semibold">
           Recommended Crops
         </Text>
-      </Pressable>
+      </TouchableOpacity>
       <View className="gap-4 bg-textSecondary/30 rounded-3xl p-4 mt-4">
         <Text className="text-textPrimary text-lg font-psemibold py-2">
           User Inputs

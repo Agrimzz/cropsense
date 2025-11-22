@@ -1,16 +1,13 @@
-import { api } from "@/api/client";
 import { CustomButton } from "@/components/ui/CustomButton";
 import { FormField } from "@/components/ui/FormField";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import { clearTokens, getRefreshToken, saveTokens } from "@/utils/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { AxiosError } from "axios";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { registerSchema, RegisterSchema } from "./validation/registerSchema";
-
 export function Register() {
   const {
     control,
@@ -26,27 +23,6 @@ export function Register() {
     },
   });
 
-  useEffect(() => {
-    const tryRefresh = async () => {
-      const refreshToken = await getRefreshToken();
-      if (!refreshToken) return; // No refresh token, stay on login
-
-      try {
-        // Attempt to refresh tokens
-        const res = await api.post("/accounts/v1/token/refresh/", {
-          refresh: refreshToken,
-        });
-        const { access } = res.data;
-        await saveTokens(access, refreshToken);
-        router.replace("/home");
-      } catch {
-        await clearTokens();
-        // Stay on login
-      }
-    };
-    tryRefresh();
-  }, []);
-
   const { mutate: register, isPending } = useApiMutation(
     "post",
     "/accounts/v1/register/"
@@ -54,7 +30,7 @@ export function Register() {
 
   const onSubmit = (data: RegisterSchema) => {
     if (data.password !== data.confirm_password) {
-      Alert.alert("Error", "Passwords do not match.");
+      Alert.alert("Register Failed", "Passwords do not match.");
       return;
     }
 
@@ -63,16 +39,38 @@ export function Register() {
       email: data.email,
       password: data.password,
     };
+
     register(payload, {
-      onSuccess: () => router.replace("/login"),
-      onError: (err: any) => {
+      onSuccess: () => {
+        Alert.alert("Success", "Account created successfully.", [
+          {
+            text: "OK",
+            onPress: () => router.replace("/login"),
+          },
+        ]);
+      },
+      onError: (err: AxiosError<any>) => {
+        console.log("Register error:", err?.response?.data || err);
+
         let message = "Something went wrong. Please try again.";
 
-        // Axios error with response
-        if (err?.response?.status) {
-          const status = err.response.status;
+        const status = err?.response?.status;
+        const data = err?.response?.data as any;
+
+        if (data) {
+          if (typeof data === "string") {
+            message = data;
+          } else if (data.detail) {
+            message = data.detail;
+          } else if (data.non_field_errors?.[0]) {
+            message = data.non_field_errors[0];
+          } else if (data.email?.[0]) {
+            message = data.email[0];
+          }
+        } else if (status) {
+          // Fallback based on status code
           if (status === 400) {
-            message = "Register Failed. Email already in use.";
+            message = "Register failed. Please check your details.";
           } else if (status === 401) {
             message = "Incorrect email or password.";
           } else if (status === 403) {
@@ -82,11 +80,10 @@ export function Register() {
           }
         }
 
-        Alert.alert("Login Failed", message);
+        Alert.alert("Register Failed", message);
       },
     });
   };
-
   return (
     <SafeAreaView className="w-full h-screen bg-background flex justify-center px-4">
       <View className="flex flex-row gap-1">
@@ -134,6 +131,7 @@ export function Register() {
             <FormField
               title="Password"
               placeholder="Enter your password"
+              type="password"
               value={field.value}
               handleChangeText={field.onChange}
               error={errors.password?.message}
@@ -148,6 +146,7 @@ export function Register() {
             <FormField
               title="Confirm Password"
               placeholder="Confirm your password"
+              type="password"
               value={field.value}
               handleChangeText={field.onChange}
               error={errors.confirm_password?.message}
