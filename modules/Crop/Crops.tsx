@@ -96,7 +96,7 @@ const Crops = () => {
                 className="w-16 h-16 rounded-2xl mr-3"
               />
               <View className="flex-1">
-                <Text className="text-textPrimary text-base font-psemibold">
+                <Text className="text-textPrimary text-base font-psemibold capitalize">
                   {item.name}
                 </Text>
                 <Text className="text-textSecondary text-xs font-pregular">
