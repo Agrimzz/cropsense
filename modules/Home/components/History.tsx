@@ -1,9 +1,18 @@
+import { useApiQuery } from "@/hooks/useApiQuery";
 import { router } from "expo-router";
+import { LoaderCircle } from "lucide-react-native";
 import React from "react";
 import { Text, View } from "react-native";
 import HistoryCard from "./HistoryCard";
 
 const History = () => {
+  const { data: history, isLoading } = useApiQuery<any>(
+    ["history"],
+    "/cropsense/v1/input-data/"
+  );
+
+  const historyPreview = history?.slice(0, 3) ?? [];
+
   return (
     <View className="w-full px-4 mt-8">
       <View className="flex flex-row justify-between items-center">
@@ -20,34 +29,41 @@ const History = () => {
         </Text>
       </View>
 
-      <View className="mt-4  mb-12">
-        <HistoryCard
-          crop="Tomato"
-          score={80}
-          temp="25°C"
-          rain="10mm"
-          humidity="60%"
-          ph="7.0"
-          img="https://images.unsplash.com/photo-1566218246241-934ad8b38ea6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <HistoryCard
-          crop="Cucumber"
-          score={80}
-          temp="25°C"
-          rain="10mm"
-          humidity="60%"
-          ph="7.0"
-          img="https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-        <HistoryCard
-          crop="Carrot"
-          score={80}
-          temp="25°C"
-          rain="10mm"
-          humidity="60%"
-          ph="7.0"
-          img="https://plus.unsplash.com/premium_photo-1680344513213-0ad1795f766b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
+      <View className="mt-4 mb-12">
+        {isLoading ? (
+          <View className="flex flex-row justify-center items-center h-full">
+            <LoaderCircle
+              size={24}
+              color="#f5f5dc"
+              strokeWidth={1.5}
+              // if this causes issues again, just drop the className
+              className="animate-spin"
+            />
+          </View>
+        ) : historyPreview.length === 0 ? (
+          <View className="flex flex-row justify-center items-center h-full">
+            <Text className="text-textPrimary text-2xl font-psemibold">
+              No History Found. Start by requesting a crop recommendation.
+            </Text>
+          </View>
+        ) : (
+          historyPreview.map((item: any) => (
+            <HistoryCard
+              key={item.id}
+              crop={item?.recommendations[0].recommended_crop.name}
+              score={item?.recommendations[0].confidence}
+              id={item?.id}
+              temp={item?.temperature}
+              rain={item?.rainfall}
+              humidity={item?.humidity}
+              ph={item?.ph}
+              img={
+                item?.recommendations[0].recommended_crop.image ||
+                "https://images.unsplash.com/photo-1511735643442-503bb3bd348a?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
+            />
+          ))
+        )}
       </View>
     </View>
   );

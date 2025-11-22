@@ -159,6 +159,7 @@ export function Register() {
         title="Register"
         handlePress={handleSubmit(onSubmit)}
         containerStyles="w-full mt-8"
+        isLoading={isPending}
       />
       <Text className="text-xs font-pregular text-textSecondary mt-4 text-center">
         Already an account?{" "}

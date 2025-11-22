@@ -10,7 +10,6 @@ export function History() {
     ["history"],
     "/cropsense/v1/input-data/"
   );
-  console.log(history);
 
   return (
     <SafeAreaView className="w-full h-screen bg-background px-4">
@@ -45,7 +44,7 @@ export function History() {
           ListEmptyComponent={
             <View className="flex flex-row justify-center items-center h-full">
               <Text className="text-textPrimary text-2xl font-psemibold">
-                No History Found
+                No History Found. Start by requesting a crop recommendation.
               </Text>
             </View>
           }
@@ -54,7 +53,7 @@ export function History() {
               crop={item?.recommendations[0].recommended_crop.name}
               score={item?.recommendations[0].confidence}
               id={item?.id}
-              temp={item?.nitrogen}
+              temp={item?.temperature}
               rain={item?.rainfall}
               humidity={item?.humidity}
               ph={item?.ph}

@@ -17,12 +17,15 @@ const QuickActions = () => {
             Get Crop Recommendations
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity className="w-[49%] bg-textSecondary/30 h-[110px]  rounded-3xl items-center justify-center ">
+        {/* <TouchableOpacity className="w-[49%] bg-textSecondary/30 h-[110px]  rounded-3xl items-center justify-center ">
           <Text className="text-textPrimary text-base font-pregular text-center">
             Explore {"\n"} Community Forum
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className=" w-[49%] mt-3 bg-textSecondary/30 h-[110px]  rounded-3xl items-center justify-center ">
+        </TouchableOpacity> */}
+        <TouchableOpacity
+          className=" w-[49%]  bg-textSecondary/30 h-[110px]  rounded-3xl items-center justify-center "
+          onPress={() => router.push("/crop")}
+        >
           <Text className="text-textPrimary text-base font-pregular text-center">
             Learn {"\n"} About Crops
           </Text>

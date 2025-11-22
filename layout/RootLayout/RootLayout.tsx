@@ -47,6 +47,8 @@ export function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="recommend" />
           <Stack.Screen name="recommendation/:id" />
+          <Stack.Screen name="crop/:id" />
+          <Stack.Screen name="crop" />
         </Stack>
       </GestureHandlerRootView>
     </QueryClientProvider>

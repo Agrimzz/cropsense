@@ -2,7 +2,7 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./components/Header";
 import History from "./components/History";
@@ -68,12 +68,11 @@ export function Home() {
               {formattedDate}
             </Text>
           </View>
-          <Image
-            source={{
-              uri: "https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            }}
-            className="w-20 h-20 rounded-full"
-          />
+          <View className="w-20 h-20 rounded-full bg-primary items-center justify-center">
+            <Text className="text-background text-3xl font-pbold ">
+              {user?.full_name.charAt(0) ?? "U"}
+            </Text>
+          </View>
         </View>
 
         <WeatherCard lat={location?.lat} lon={location?.lon} />

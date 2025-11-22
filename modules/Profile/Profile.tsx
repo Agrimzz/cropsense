@@ -14,7 +14,12 @@ export function Profile() {
         </Text>
       </View>
 
-      <View className="mt-4">
+      <View className="mt-4 gap-4 items-center">
+        <View className="flex items-center justify-center w-48 rounded-full h-48 bg-primary">
+          <Text className="text-background text-7xl font-pbold ">
+            {user?.full_name.charAt(0) ?? "U"}
+          </Text>
+        </View>
         <FormField
           title="Name"
           placeholder="Enter your name"
@@ -27,6 +32,7 @@ export function Profile() {
           placeholder="Enter your email"
           value={user?.email}
           handleChangeText={(text: string) => console.log(text)}
+          disabled={true}
         />
       </View>
     </SafeAreaView>

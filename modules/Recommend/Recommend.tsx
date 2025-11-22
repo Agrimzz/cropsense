@@ -2,6 +2,7 @@ import { CustomButton } from "@/components/ui/CustomButton";
 import { FormField } from "@/components/ui/FormField";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import { router } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
@@ -11,6 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RecommendSchema, recommendSchema } from "./schema/recommendSchema";
 
 export function Recommend() {
+  const queryClient = useQueryClient();
+
   const {
     control,
     handleSubmit,
@@ -48,7 +51,7 @@ export function Recommend() {
     };
     recommend(payload, {
       onSuccess: (res: any) => {
-        console.log(res);
+        queryClient.invalidateQueries({ queryKey: ["history"] });
         router.replace(`/recommendation/${res.input_data.id}`);
       },
       onError: (err: any) => {

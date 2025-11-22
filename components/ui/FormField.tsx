@@ -17,7 +17,7 @@ export function FormField({
   type = "text",
   otherStyles = "",
   error,
-  disabled,
+  disabled = false,
   containerStyles,
   ...props
 }: FormFieldProps) {
@@ -54,6 +54,9 @@ export function FormField({
           placeholderTextColor="#ccc"
           secureTextEntry={isPasswordField && !showPassword}
           keyboardType={keyboardType}
+          editable={!disabled}
+          showSoftInputOnFocus={!disabled}
+          caretHidden={disabled}
           {...props}
         />
 
