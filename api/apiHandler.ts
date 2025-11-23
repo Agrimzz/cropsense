@@ -16,14 +16,12 @@ export const apiHandler = async (requestFn: () => Promise<any>) => {
         const refreshToken = await getRefreshToken();
         if (!refreshToken) throw new Error("No refresh token");
 
-        // Call refresh endpoint, adjust payload/response as needed
         const refreshRes = await api.post("/accounts/v1/refresh/", {
           refresh: refreshToken,
         });
         const { access, refresh } = refreshRes.data;
         await saveTokens(access, refresh);
 
-        // Retry original request with new access token
         const newAccessToken = await getAccessToken();
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
         return await api.request(error.config);

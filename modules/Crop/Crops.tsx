@@ -22,7 +22,7 @@ type CropsResponse = {
 
 const Crops = () => {
   const [page, setPage] = useState(1);
-  const [crops, setCrops] = useState<Crop[]>([]); // ✅ accumulate items here
+  const [crops, setCrops] = useState<Crop[]>([]);
 
   const { data, isLoading, isFetching } = usePaginatedApiQuery<CropsResponse>(
     ["crops", page],
@@ -39,7 +39,6 @@ const Crops = () => {
     );
   }, [data, page]);
 
-  // ✅ load-more handler
   const handleLoadMore = () => {
     if (hasNextPage && !isFetching) {
       setPage((prev) => prev + 1);

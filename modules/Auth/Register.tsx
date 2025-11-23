@@ -68,7 +68,6 @@ export function Register() {
             message = data.email[0];
           }
         } else if (status) {
-          // Fallback based on status code
           if (status === 400) {
             message = "Register failed. Please check your details.";
           } else if (status === 401) {

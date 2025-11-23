@@ -10,10 +10,9 @@ export function Onboard() {
   useEffect(() => {
     const tryRefresh = async () => {
       const refreshToken = await getRefreshToken();
-      if (!refreshToken) return; // No refresh token, stay on login
+      if (!refreshToken) return;
 
       try {
-        // Attempt to refresh tokens
         const res = await api.post("/accounts/v1/token/refresh/", {
           refresh: refreshToken,
         });
@@ -22,7 +21,6 @@ export function Onboard() {
         router.replace("/home");
       } catch {
         await clearTokens();
-        // Stay on login
       }
     };
     tryRefresh();

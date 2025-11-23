@@ -36,7 +36,6 @@ const History = () => {
               size={24}
               color="#f5f5dc"
               strokeWidth={1.5}
-              // if this causes issues again, just drop the className
               className="animate-spin"
             />
           </View>

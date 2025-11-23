@@ -57,7 +57,6 @@ export function Recommend() {
       onError: (err: any) => {
         let message = "Something went wrong. Please try again.";
 
-        // Axios error with response
         if (err?.response?.status) {
           const status = err.response.status;
           if (status === 400) {

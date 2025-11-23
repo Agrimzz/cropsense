@@ -12,7 +12,6 @@ function TabIcon({ focused, Icon }: any) {
   const active = "#C3FF0A";
   const inactive = "#f5f5dc";
 
-  // shared values for animation
   const scale = useSharedValue(1);
   const translateY = useSharedValue(0);
 

@@ -26,14 +26,12 @@ export function Home() {
 
   useEffect(() => {
     (async () => {
-      // Try to load location from storage first
       const storedLocation = await AsyncStorage.getItem("userLocation");
       if (storedLocation) {
         setLocation(JSON.parse(storedLocation));
         return;
       }
 
-      // If not found, get current location
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") return;
 
@@ -44,7 +42,6 @@ export function Home() {
       };
       setLocation(newLocation);
 
-      // Save to AsyncStorage
       await AsyncStorage.setItem("userLocation", JSON.stringify(newLocation));
     })();
   }, []);

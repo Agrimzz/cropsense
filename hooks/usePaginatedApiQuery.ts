@@ -10,7 +10,7 @@ export function usePaginatedApiQuery<T = any>(
     queryKey: Array.isArray(key) ? key : [key],
     queryFn: async () => {
       const response = await api.get(endpoint);
-      return response.data as T; // full paginated shape
+      return response.data as T;
     },
     ...options,
   });
